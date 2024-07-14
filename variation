@@ -1,0 +1,350 @@
+
+
+// Add custom product setup actions
+function product_with_variations() {
+    if (is_product()) {
+        global $post;
+
+        // Check if the product page URL contains "/products/coluber-custom-cable-design-your-own/"
+        if (false !== strpos($_SERVER['REQUEST_URI'], '/products/coluber-custom-cable-design-your-own/')) {
+            add_action('woocommerce_before_single_product_summary', 'custom_product_image_container', 20);
+            add_action('woocommerce_before_add_to_cart_button', 'custom_product_attributes_container', 10);
+            add_action('wp_footer', 'custom_product_scripts');
+            add_action('woocommerce_single_product_summary', 'display_total_price_container', 25);
+            remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_price', 10); // Remove default price
+            add_action('woocommerce_single_product_summary', 'display_updated_price', 10); // Add custom price display
+        }
+    }
+}
+add_action('wp', 'product_with_variations');
+
+// Function to display custom product images and SVG
+function custom_product_image_container() {
+    ?>
+    <div id="custom-product-container">
+        <img id="connectorA" src="https://householdandgift.com/c/wp-content/uploads/2024/06/xlrmale.png" alt="Connector A">
+        <img id="connectorB" src="https://householdandgift.com/c/wp-content/uploads/2024/06/xlrmale.png" alt="Connector B">
+        <img src="https://householdandgift.com/c/wp-content/uploads/2024/06/black.png" id="product-img">
+    </div>
+    <style>
+        #custom-product-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            width: 489px;
+            height: 300px;
+            margin-bottom: 70px;
+        }
+        #connectorA, #connectorB {
+            width: 150px;
+            height: auto;
+            margin: 10px;
+        }
+        #connectorA {
+            position: absolute;
+            top: 80%;
+            right: -7.6%;
+            transform: rotate(312deg);
+        }
+        #connectorB {
+            position: absolute;
+            bottom: 15%;
+            left: -14.2%;
+            transform: rotate(355deg);
+        }
+        #product-img {
+            width: 80%;
+        }
+        .woocommerce div.product form.cart .variations {
+            display: none;
+        }
+        @media screen and (max-width: 500px) {
+            #custom-product-container {
+                width: 272px;
+                height: 200px;
+				margin-left: 5%;
+            }
+                 #connectorA, #connectorB {
+                width: 75px;
+            }
+            #connectorB {
+                bottom: 29.9%;
+                left: -13.7%;
+            }
+            #connectorA {
+                top: 65%;
+                right: -7.4%;
+            }
+        }
+    </style>
+    <?php
+}
+
+// Function to display custom product attributes
+function custom_product_attributes_container() {
+    ?>
+    <div id="product-attributes">
+        <label for="color">Color:</label>
+        <select id="color" name="color">
+            <option value="black">black</option>
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="orange">Orange</option>
+            <option value="pink">Pink</option>
+            <option value="purple">Purple</option>
+            <option value="red">Red</option>
+            <option value="white">White</option>
+            <option value="yellow">Yellow</option>
+        </select>
+
+        <label for="connectorA-select">Connector A:</label>
+        <select id="connectorA-select" name="connectorA">
+            <option value="xlrmale" name="XLR Male" data-price="2" selected >XLR Male</option>
+            <option value="xlrfemale" name="XLR Female" data-price="2">XLR Female</option>
+            <option value="ramalea" name="XLR Male - Right Angle" data-price="4">XLR Male - Right Angle</option>
+            <option value="rafemalea" name="XLR Female - Right Angle" data-price="4">XLR Female - Right Angle</option>
+            <option value="cc-1" name="1/4 inch TRS Male" data-price="2">1/4 inch TRS Male</option>
+            <option value="tsmalea-removebg-preview-1" name="1/4 inch TS Male" data-price="2">1/4 inch TS Male</option>
+            <option value="ratrsmalea1" data-price="3" name="1/4 inch TRS Male - Right Angle">1/4 inch TRS Male - Right Angle</option>
+            <option value="ratsmalea2" data-price="3" name="1/4 inch TS Male - Right Angle">1/4 inch TS Male - Right Angle</option>
+            <option value="trsmaleaa" data-price="2" name="3.5 mm TRS Male">3.5 mm TRS Male</option>
+        </select>
+
+        <label for="connectorB-select">Connector B:</label>
+        <select id="connectorB-select" name="connectorB">
+            <option value="xlrmale" name="XLR Male" data-price="2" selected>XLR Male</option>
+            <option value="xlrfemale" name="XLR Female" data-price="2">XLR Female</option>
+            <option value="ramale" name="XLR Male - Right Angle" data-price="4">XLR Male - Right Angle</option>
+            <option value="rafemale" name="XLR Female - Right Angle" data-price="4">XLR Female - Right Angle</option>
+            <option value="cc-1" name="1/4 inch TRS Male" data-price="2">1/4 inch TRS Male</option>
+            <option value="tsmalea-removebg-preview-1"  name="1/4 inch TS Male" data-price="2">1/4 inch TS Male</option>
+            <option value="ratrsmaleb" data-price="3" name="1/4 inch TRS Male - Right Angle">1/4 inch TRS Male - Right Angle</option>
+            <option value="ratsmaleb" data-price="3" name="1/4 inch TS Male - Right Angle">1/4 inch TS Male - Right Angle</option>
+            <option value="trsmaleaa" data-price="2" name="3.5 mm TRS Male">3.5 mm TRS Male</option>
+        </select>
+
+        <label for="length">Length:</label>
+        <select id="length" name="length">
+            <option value="0.5" data-price="4.4">0.5</option>
+            <option value="1" data-price="4.9">1</option>
+            <option value="1.5" data-price="5.4">1.5</option>
+            <option value="3" data-price="5.9">3</option>
+            <option value="5" data-price="6.9">5</option>
+            <option value="6" data-price="7.9">6</option>
+            <option value="10" data-price="8.9">10</option>
+            <option value="15" data-price="15.9">15</option>
+            <option value="20" data-price="18.9">20</option>
+            <option value="25" data-price="22.9">25</option>
+            <option value="30" data-price="27.9">30</option>
+            <option value="35" data-price="30.9">35</option>
+            <option value="50" data-price="44.9">50</option>
+            <option value="75" data-price="56.9">75</option>
+            <option value="100" data-price="80.9">100</option>
+            <option value="150" data-price="117.9">150</option>
+            <option value="200" data-price="140.9">200</option>
+        </select>
+    </div>
+ <input type="hidden" id="product_price" name="product_price" value="5.09"> <!-- Initial base price -->
+   
+    <?php
+}
+
+// Function to display total price container and hide WooCommerce's default price container
+function display_total_price_container() {
+    ?>
+		   
+																			  
+		 
+								
+							 
+							 
+		 
+			
+    <div id="total-price-container">
+        <p>Total Price: $<span id="total-price">5.49</span></p>
+    </div>
+    <?php
+}
+
+// Function to display updated price
+// Function to display updated price
+function display_updated_price() {
+    ?>
+    <p class="price">
+        <span class="woocommerce-Price-amount amount">
+            <span class="woocommerce-Price-currencySymbol">$</span>
+            <span id="updated-price">5.09</span> <!-- Initial price display -->
+        </span>
+    </p>
+    <?php
+}
+
+function custom_product_scripts() {
+    ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const basePrice = 5.09; // Initial base price
+																			 
+
+        function updatePrice() {
+            const colorPrice = 0; // Example: additional cost for color (if any)
+            const connectorAPrice = parseFloat(document.getElementById('connectorA-select').selectedOptions[0].getAttribute('data-price'));
+            const connectorBPrice = parseFloat(document.getElementById('connectorB-select').selectedOptions[0].getAttribute('data-price'));
+            const lengthPrice = parseFloat(document.getElementById('length').selectedOptions[0].getAttribute('data-price'));
+
+            const totalPrice = basePrice + colorPrice + connectorAPrice + connectorBPrice + lengthPrice;
+																	  
+				
+																															  
+			 document.getElementById('connectorA-select').addEventListener('change', function() {
+             document.getElementById('connectorA').src = "https://householdandgift.com/c/wp-content/uploads/2024/06/" + this.value + ".png";
+            });
+			
+			document.getElementById('color').addEventListener('change', function() {
+				document.getElementById('product-img').src = "https://householdandgift.com/c/wp-content/uploads/2024/06/" + this.value + ".png";
+				console.log(this.value)
+			})
+
+            document.getElementById('connectorB-select').addEventListener('change', function() {
+                document.getElementById('connectorB').src = "https://householdandgift.com/c/wp-content/uploads/2024/06/" + this.value + ".png";
+            });
+
+            document.getElementById('total-price').textContent = totalPrice.toFixed(2);
+            document.getElementById('updated-price').textContent = totalPrice.toFixed(2);
+							  
+			   
+   
+																		   
+            document.getElementById('product_price').value = totalPrice.toFixed(2);
+						   
+	 
+
+            console.log('Updated Price:', totalPrice.toFixed(2)); // Debugging
+        }
+							  
+			   
+
+        document.getElementById('connectorA-select').addEventListener('change', updatePrice);
+        document.getElementById('color').addEventListener('change', updatePrice);
+        document.getElementById('connectorB-select').addEventListener('change', updatePrice);
+        document.getElementById('length').addEventListener('change', updatePrice);
+
+        updatePrice();
+    });
+    </script>
+    <input type="hidden" id="product_price" name="product_price" value="5.09"> <!-- Initial base price -->
+    <?php
+}
+add_action('wp_footer', 'custom_product_scripts');
+
+
+
+
+// Function to add custom data to cart item
+function add_custom_data_to_cart_item($cart_item_data, $product_id, $variation_id) {
+    $total_price = isset($_POST['product_price']) ? floatval($_POST['product_price']) : 5.09; // Initial base price
+							   
+								
+									
+													 
+									   
+														  
+										   
+									  
+														   
+																  
+													 
+																 
+												   
+										 
+												
+	  
+
+    // Add custom data to cart item
+    if (isset($_POST['color'])) {
+        $cart_item_data['custom_color'] = sanitize_text_field($_POST['color']);
+    }
+    if (isset($_POST['connectorA'])) {
+																	  
+        $cart_item_data['custom_connectorA'] = sanitize_text_field($_POST['connectorA']);
+    }
+    if (isset($_POST['connectorB'])) {
+																	  
+        $cart_item_data['custom_connectorB'] = sanitize_text_field($_POST['connectorB']);
+    }
+    if (isset($_POST['length'])) {
+        $cart_item_data['custom_length'] = sanitize_text_field($_POST['length']);
+    }
+
+    // Set custom price in cart item data
+    $cart_item_data['custom_price'] = $total_price;
+
+    // Debugging
+    error_log('Custom Price Added to Cart: ' . $total_price);
+
+    // Generate a unique key to avoid merging of cart items
+    $cart_item_data['unique_key'] = md5(microtime() . rand());
+
+    return $cart_item_data;
+}
+
+add_filter('woocommerce_add_cart_item_data', 'add_custom_data_to_cart_item', 10, 3);
+
+						 
+function set_custom_price_in_cart($cart_object) {
+    foreach ($cart_object->get_cart() as $cart_item_key => $cart_item) {
+        if (isset($cart_item['custom_price'])) {
+            $cart_item['data']->set_price($cart_item['custom_price']);
+            // Debugging
+            error_log('Custom Price Set in Cart: ' . $cart_item['custom_price']);
+        }
+    }
+}
+add_action('woocommerce_before_calculate_totals', 'set_custom_price_in_cart', 10, 1);
+
+							  
+function display_custom_data_in_cart($item_data, $cart_item) {
+    if (isset($cart_item['custom_color'])) {
+        $item_data[] = array(
+            'name' => 'Color',
+            'value' => $cart_item['custom_color'],
+        );
+    }
+    if (isset($cart_item['custom_connectorA'])) {
+        $item_data[] = array(
+            'name' => 'Connector A',
+            'value' => $cart_item['custom_connectorA'],
+        );
+    }
+    if (isset($cart_item['custom_connectorB'])) {
+        $item_data[] = array(
+            'name' => 'Connector B',
+            'value' => $cart_item['custom_connectorB'],
+        );
+    }
+    if (isset($cart_item['custom_length'])) {
+        $item_data[] = array(
+            'name' => 'Length',
+            'value' => $cart_item['custom_length'],
+        );
+    }
+
+	
+
+    return $item_data;
+}
+add_filter('woocommerce_get_item_data', 'display_custom_data_in_cart', 10, 2);
+
+// // Remove default product image for specific product
+function removes_default_product_image() {
+    if (is_product()) {
+        global $post;
+
+        if (false !== strpos($_SERVER['REQUEST_URI'], '/product/coluber-custom-cable-design-your-own/')) {
+            remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
+        }
+    }
+}
+add_action('wp', 'removes_default_product_image');
+	
